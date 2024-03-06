@@ -1,5 +1,5 @@
 #include "titanic.h"
-// #include "ortools/algorithms/knapsack_solver.h"
+
 
 stringMatrix readCsv(const std::string& filePath) {
     stringMatrix matrix;
@@ -8,6 +8,7 @@ stringMatrix readCsv(const std::string& filePath) {
         std::cout << "cringe";
         return matrix;
     }
+
 
     std::string line;
     while(std::getline(inputfile, line)) {
@@ -22,6 +23,7 @@ stringMatrix readCsv(const std::string& filePath) {
     return matrix;
 }
 
+
 void printMatrix(stringMatrix matrix) {
     for (size_t i = 0; i < matrix.size(); i++) {
         for (size_t j = 0; j < matrix[i].size(); j++) {
@@ -30,6 +32,7 @@ void printMatrix(stringMatrix matrix) {
         std::cout << '\n';
     }
 }
+
 
 // возвращает нужную колонку из матрицы (для ортулс)
 std::vector<int64_t> getColumn(int columnNumber, const stringMatrix& matrix) {
@@ -48,6 +51,7 @@ std::vector<int64_t> getColumn(int columnNumber, const stringMatrix& matrix) {
     }
     return vec;
 }
+
 
 double WEIGHTS[] {0.5, 0.25, 0.25};
 double defineRate(short age, short pclass, short sex) {
@@ -72,6 +76,7 @@ void fillNan (stringMatrix& matrix, int columnNum) {
     }
 }
 
+
 void fillRate (stringMatrix& matrix) {
     matrix[0].push_back("Rate");
     for(size_t i = 1; i < matrix.size(); i++) {
@@ -85,12 +90,14 @@ void fillRate (stringMatrix& matrix) {
     }
 }
 
+
 double randomGenerator(double weight) {
     std::random_device rd;      //говорим что будем использовать рандомазер
     std::mt19937 gen(rd());     //правило по которому работает рандомайзер, rd - запускает его
     std::uniform_real_distribution<double> distrib(-weight*0.5, weight);    //нормальное распределение - то как должен выглядеть отрезок сгенерированных нами чисел
     return weight + distrib(gen);       //выбираем число из отрезка по правилу, возвращаем вес + рандомное отклонение (может быть < 0)
 }
+
 
 // заполняем вес каждого человека
 void fillWeights(stringMatrix& matrix, const obesityGenderMap& map) {
@@ -115,9 +122,8 @@ void fillWeights(stringMatrix& matrix, const obesityGenderMap& map) {
 
         } catch(...) {};
 
+    }
 }
-}
-
 
 
 void writeCsv(const std::string& filePath, const stringMatrix& matrix) {
@@ -156,7 +162,7 @@ void selectSurvivors(stringMatrix matrix, size_t boats, size_t seats)
         }
         survived.push_back(boat);
     }
-    size_t count = 1;
+    // size_t count = 1;
     // for (const std::vector<Passenger>& boat: survived)
     // {
     //     std::cout << "boat " << count++ << '\n';
@@ -167,7 +173,7 @@ void selectSurvivors(stringMatrix matrix, size_t boats, size_t seats)
 }
 
 personObesity personObesity::operator+(const personObesity& x) const {
-    personObesity newTEMP1 {gender, age, weight+x.weight};
+    personObesity newTEMP1 {gender, age, weight+x.weight}; 
     return newTEMP1;
 }
 
@@ -227,50 +233,17 @@ obesityGenderMap getObesity(const std::string& filePath) {
         std::copy_if (vectorWomen.begin(), vectorWomen.end(), std::back_inserter (tempWoman), [i](const personObesity& x){return x.age == i;});
         std::copy_if (vectorMen.begin(), vectorMen.end(), std::back_inserter (tempMan), [i](const personObesity& x){return x.age == i;});
         if (tempMan.size() != 0) {
-            // double rnd = (rand() % 6)*pow(-1, rand());
             personObesity sumOfWeights = std::reduce(tempMan.begin(), tempMan.end());
-            tempMapMan.insert({i, ((sumOfWeights.weight)/tempMan.size())}); // they are fat so we reduce average weight by 20%
-            // std::cout <<i << '\t'<< (sumOfWeights.weight  * 0.8)/tempMan.size() << '\t'<< rnd <<'\n';
+            tempMapMan.insert({i, ((sumOfWeights.weight)/tempMan.size())}); 
         }
         if (tempWoman.size() != 0) {
-            // double rnd = (rand() % 5)*pow(-1, rand());
             personObesity sumOfWeights = std::reduce(tempWoman.begin(), tempWoman.end());
-            tempMapWomen.insert({i, ((sumOfWeights.weight)/tempWoman.size())}); // they are fat so we reduce average weight by 20%
+            tempMapWomen.insert({i, ((sumOfWeights.weight)/tempWoman.size())}); 
             std::cout << "age:   " << i << '\t'<< "average weigth:   " << (sumOfWeights.weight  * 0.8)/tempWoman.size() <<'\n';
         }
-
-        // for (std::pair<int, double> woman: tempMapWomen) {
-        //     if (woman.second == 0) {
-                
-        //     }
-        // }
     }
 
     map.insert({"Male", tempMapMan});
     map.insert({"Female", tempMapWomen});
-
-
-
-    // for (auto x : map){ 
-    //         for (auto y : x.second) {
-    //             // std::cout << y.first << ':' << y.second << std::endl;
-    //             }
-            
-    //         // std::cout << '\n';
-    //         }
     return map;
 }
-
-
-
-
-
-
-
-
-
-void generateWeights(stringMatrix& matrix){
-    
-}
-
-

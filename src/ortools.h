@@ -13,6 +13,8 @@
     std::vector<std::vector<int64_t>> weights = {getColumn(CSV_FIELDS::Weight, matrix)};
 
     std::vector<int64_t> capacities = {1000};
+
+
     solver.Init(values, weights, capacities);
     double computed_value = solver.Solve();
 
@@ -44,4 +46,4 @@
     LOG(INFO) << "Total weight: " << total_weights;
     LOG(INFO) << "Packed weights: {" << packed_weights_ss.str() << "}";
     }
-    }  // namespace operations_research
+    } 
